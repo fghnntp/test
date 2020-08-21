@@ -15,6 +15,8 @@ class MyForm(QDialog):
         self.ui.pushButtonStepCircleSpeed.clicked.connect(
             self.show_step_circle_speed)
         self.ui.pushButtonStepEnable.clicked.connect(self.show_step_enable)
+        self.ui.pushButtonStepBackZero.clicked.connect(
+            self.show_step_back_zero)
         self.show()
 
     def show_step_angle(self):
@@ -22,7 +24,8 @@ class MyForm(QDialog):
             show setp motor's step angle
         """
         try:
-            step_angle = step_motor.read_register(0x0000, 1)
+            step_angle = int(step_motor.read_register(0x0000, 1))
+            step_angle = step_angle/100
             self.ui.textEdit.append(str(step_angle))
         except:
             self.ui.textEdit.append('Failed to read from instrument')
@@ -68,6 +71,16 @@ class MyForm(QDialog):
         except:
             self.ui.textEdit.append("Failed to read from instrument.")
 
+    def show_step_back_zero(self):
+        """
+            show the step motor's bact to zero's register's num
+        """
+        try:
+            step_back_zero = str(step_motor.read_register(0x0006, 1))
+            self.ui.textEdit.append(step_back_zero)
+        except:
+            self.ui.textEdit.append("Failed to read from instrument.")
+
 
 if __name__ == "__main__":
     step_motor = minimalmodbus.Instrument('COM6', 1)
@@ -78,19 +91,3 @@ if __name__ == "__main__":
     w = MyForm()
     w.show()
     sys.exit(app.exec_())
-
-    # step_back_zero = step_motor.read_register(0x0006, 1)
-    # print('step_back_zero = ', step_back_zero)
-    # time.sleep(1)
-
-    # step_direction = step_motor.read_register(0x000b, 1)
-    # print('step_direction = ', step_direction)
-    # time.sleep(1)
-
-    # step_work_mode = step_motor.read_register(0x004c, 1)
-    # print('step_work_mode = ', step_work_mode)
-    # time.sleep(1)
-
-    # step_motor.write_register(0x0004, 1, 1)
-    # time.sleep(5)
-    # step_motor.write_register(0x0004, 0, 1)
