@@ -15,6 +15,7 @@ class MyForm(QDialog):
         self.ui.pushButtonStepEnable.clicked.connect(self.show_step_enable)
         self.ui.pushButtonStepBackZero.clicked.connect(
             self.show_step_back_zero)
+        self.ui.pushButtonClockwise.clicked.connect(self.set_clockwise)
         self.show()
 
     def show_step_info(self):
@@ -58,8 +59,18 @@ class MyForm(QDialog):
         except:
             self.ui.textEdit.append("Failed to read from instrument.")
 
+    def set_clockwise(self):
+        """
+            set the step motor clockwise rotate
+        """
+        try:
+            step_motor.write_bit(0x0004, 1)
+        except:
+            self.ui.textEdit.append("Failed to write in 0x0004.")
+
 
 if __name__ == "__main__":
+    # set up serial's infomation`
     step_motor = minimalmodbus.Instrument('COM6', 1)
     step_motor.close_port_after_each_call = True
     step_motor.serial.baudrate = 9600
