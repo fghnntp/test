@@ -23,7 +23,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -37,13 +37,6 @@
      <widget class="QPushButton" name="pushButtonStepInfo">
       <property name="text">
        <string>step_info</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="pushButtonStepDivide">
-      <property name="text">
-       <string>step_divide</string>
       </property>
      </widget>
     </item>
@@ -61,17 +54,10 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="0" column="1">
      <widget class="QPushButton" name="pushButtonStepEnable">
       <property name="text">
        <string>step_enable</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QPushButton" name="pushButtonStepAngle">
-      <property name="text">
-       <string>setp angle</string>
       </property>
      </widget>
     </item>

@@ -9,26 +9,13 @@ class MyForm(QDialog):
         super().__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        self.ui.pushButtonStepAngle.clicked.connect(self.show_step_angle)
         self.ui.pushButtonStepInfo.clicked.connect(self.show_step_info)
-        self.ui.pushButtonStepDivide.clicked.connect(self.show_step_divided)
         self.ui.pushButtonStepCircleSpeed.clicked.connect(
             self.show_step_circle_speed)
         self.ui.pushButtonStepEnable.clicked.connect(self.show_step_enable)
         self.ui.pushButtonStepBackZero.clicked.connect(
             self.show_step_back_zero)
         self.show()
-
-    def show_step_angle(self):
-        """
-            show setp motor's step angle
-        """
-        try:
-            step_angle = int(step_motor.read_register(0x0000, 1))
-            step_angle = step_angle/100
-            self.ui.textEdit.append(str(step_angle))
-        except:
-            self.ui.textEdit.append('Failed to read from instrument')
 
     def show_step_info(self):
         """
@@ -39,16 +26,6 @@ class MyForm(QDialog):
             self.ui.textEdit.append(step_info)
         except:
             self.ui.textEdit.append('Failed to read from instrument')
-
-    def show_step_divided(self):
-        """
-            show step detailed diveided
-        """
-        try:
-            step_divide = str(step_motor.read_register(0x0001, 1))
-            self.ui.textEdit.append(step_divide)
-        except:
-            self.ui.textEdit.append("Failed to read from instrument.")
 
     def show_step_circle_speed(self):
         """
