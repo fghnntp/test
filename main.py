@@ -16,6 +16,8 @@ class MyForm(QDialog):
         self.ui.pushButtonStepBackZero.clicked.connect(
             self.show_step_back_zero)
         self.ui.pushButtonClockwise.clicked.connect(self.set_clockwise)
+        self.ui.pushButtonAntiClockwise.clicked.connect(self.set_anticlockwise)
+        self.ui.pushButtonStop.clicked.connect(self.set_stop)
         self.show()
 
     def show_step_info(self):
@@ -64,9 +66,31 @@ class MyForm(QDialog):
             set the step motor clockwise rotate
         """
         try:
+            step_motor.write_bit(0x0005, 0)
             step_motor.write_bit(0x0004, 1)
         except:
             self.ui.textEdit.append("Failed to write in 0x0004.")
+
+    def set_anticlockwise(self):
+        """
+            set the step motor anticlockwise rotate
+        """
+        try:
+            step_motor.write_bit(0x0004, 0)
+            step_motor.write_bit(0x0005, 1)
+        except:
+            self.ui.textEdit.append("Failed to write in 0x0005.")
+
+    def set_stop(self):
+        """
+            let the step motor stop
+        """
+        try:
+            step_motor.write_bit(0x0004, 0)
+            step_motor.write_bit(0x0005, 0)
+        except:
+            self.ui.textEdit.append("Failed to stop the step_motor.")
+
 
 
 if __name__ == "__main__":
