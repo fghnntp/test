@@ -179,4 +179,4 @@ class StepMotor(minimalmodbus.Instrument):
         else:
             print("can't set back to zero")
 
-
+setup(console=['stepMotorModule.py'])
