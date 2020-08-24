@@ -18,7 +18,13 @@ class StepMotorSer(QDialog):
         self.ui.pushButtonAntiClockwise.clicked.connect(self.set_anticlockwise)
         self.ui.pushButtonStop.clicked.connect(self.set_stop)
         self.ui.pushButtonStepInfo.clicked.connect(self.show_step_info)
+        self.ui.pushButtonStopBackZero.clicked.connect(self.back_zero)
         self.show()
+
+        self.step_motor = minimalmodbus.Instrument('COM6', 1)
+        self.step_motor.close_port_after_each_call = True
+        self.step_motor.serial.baudrate = 9600
+        self.step_motor.serial.port
 
     def set_divide(self):
         """
@@ -36,8 +42,8 @@ class StepMotorSer(QDialog):
             # if the divided num is right, try to set the divided num
             if num in {1, 2, 4, 8}:
                 try:
-                    while(int(step_motor.read_register(0x0001, 1)) != num):
-                        step_motor.write_register(0x0001, num, 1)
+                    while(int(self.step_motor.read_register(0x0001, 1)) != num):
+                        self.step_motor.write_register(0x0001, num, 1)
                 except:
                     self.ui.textEdit.append('wrong set')
                 else:
@@ -47,9 +53,25 @@ class StepMotorSer(QDialog):
                 self.ui.textEdit.append(
                     'Please input the right num in {1, 2, 4, 8}')
 
+    def show_step_info(self):
+        """
+            show step motor's serial's base information
+        """
+        count = 5
+        while(count > 0):
+            count -= 1
+            try:
+                step_info = str(self.step_motor)
+                self.ui.textEdit.append(step_info)
+            except:
+                self.ui.textEdit.append('Failed to read from instrument')
+            else:
+                self.ui.textEdit.append('read from instrument successfully')
+                break
+
     def set_step_back_zero(self):
         """
-            set the step motor's back to zero's register's num, i.e, the channel 
+            set the step motor's back to zero's register's num, i.e, the channel
         """
         # try to read the back zero num
         count = 5
@@ -63,8 +85,8 @@ class StepMotorSer(QDialog):
             # if the divided num is right, try to set the step_back_zero num
             if num in {0, 1, 2, 3, 4, 5}:
                 try:
-                    while(int(step_motor.read_register(0x0006, 1)) != num):
-                        step_motor.write_register(0x0006, num, 1)
+                    while(int(self.step_motor.read_register(0x0006, 1)) != num):
+                        self.step_motor.write_register(0x0006, num, 1)
                 except:
                     self.ui.textEdit.append('wrong set')
                 else:
@@ -90,8 +112,8 @@ class StepMotorSer(QDialog):
             # if the step motor speed num is right, try to set the motor speed num
             if num > 0 and num < 10:
                 try:
-                    while(int(step_motor.read_register(0x0008, 1)) != num):
-                        step_motor.write_register(0x0008, num, 1)
+                    while(int(self.step_motor.read_register(0x0008, 1)) != num):
+                        self.step_motor.write_register(0x0008, num, 1)
                 except:
                     self.ui.textEdit.append('wrong set')
                 else:
@@ -109,8 +131,9 @@ class StepMotorSer(QDialog):
         while(count > 0):
             count -= 1
             try:
-                step_motor.write_bit(0x0005, 0)
-                step_motor.write_bit(0x0004, 1)
+                self.step_motor.write_bit(0x0003, 0)
+                self.step_motor.write_bit(0x0005, 0)
+                self.step_motor.write_bit(0x0004, 1)
             except:
                 self.ui.textEdit.append("Failed to write in 0x0004.")
             else:
@@ -125,8 +148,9 @@ class StepMotorSer(QDialog):
         while(count > 0):
             count -= 1
             try:
-                step_motor.write_bit(0x0004, 0)
-                step_motor.write_bit(0x0005, 1)
+                self.step_motor.write_bit(0x0003, 0)
+                self.step_motor.write_bit(0x0004, 0)
+                self.step_motor.write_bit(0x0005, 1)
             except:
                 self.ui.textEdit.append("Failed to write in 0x0005.")
             else:
@@ -141,35 +165,43 @@ class StepMotorSer(QDialog):
         while(count > 0):
             count -= 1
             try:
-                step_motor.write_bit(0x0004, 0)
-                step_motor.write_bit(0x0005, 0)
+                self.step_motor.write_bit(0x0004, 0)
+                self.step_motor.write_bit(0x0005, 0)
+                self.step_motor.write_bit(0x0009, 0)
+                self.step_motor.write_bit(0x0003, 1)
             except:
-                self.ui.textEdit.append("Failed to stop the step_motor.")
+                self.ui.textEdit.append("Failed to stop the self.step_motor.")
             else:
-                self.ui.textEdit.append("stop the step_motor successfully.")
+                self.ui.textEdit.append("stop the self.step_motor successfully.")
                 break
 
-    def show_step_info(self):
+    def back_zero(self):
         """
-            show step motor's serial's base information
+            back to zero
         """
         count = 5
         while(count > 0):
             count -= 1
             try:
-                step_info = str(self.step_motor)
-                self.ui.textEdit.append(step_info)
+                flag = int(self.step_motor.read_register(0x0006, 1))
+                if flag != 0:
+                    try:
+                        self.step_motor.write_bit(0x0003, 0)
+                        self.step_motor.write_bit(0x0004, 0)
+                        self.step_motor.write_bit(0x0005, 0)
+                        self.step_motor.write_bit(0x0009, 1)
+                    except:
+                        self.ui.textEdit.append("Failed to back zero.")
+                    else:
+                        self.ui.textEdit.append("back zero successfully.")
+                        break
             except:
-                self.ui.textEdit.append('Failed to read from instrument')
-            else:
-                self.ui.textEdit.append('read from instrument successfully')
+                pass
 
 
 if __name__ == "__main__":
     # set up serial's infomation`
-    step_motor = minimalmodbus.Instrument('COM6', 1)
-    step_motor.close_port_after_each_call = True
-    step_motor.serial.baudrate = 9600
+    
 
     app = QApplication(sys.argv)
     w = StepMotorSer()
