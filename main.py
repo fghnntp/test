@@ -21,7 +21,7 @@ class StepMotorSer(QDialog):
         self.ui.pushButtonStopBackZero.clicked.connect(self.back_zero)
         self.show()
 
-        self.step_motor = minimalmodbus.Instrument('COM6', 1)
+        self.step_motor = minimalmodbus.Instrument('COM3', 1)
         self.step_motor.close_port_after_each_call = True
         self.step_motor.serial.baudrate = 9600
         self.step_motor.serial.port
@@ -109,6 +109,7 @@ class StepMotorSer(QDialog):
                 num = int(num)
             except:
                 self.ui.textEdit.append('Please set step_circle_speed')
+                num = 0
             # if the step motor speed num is right, try to set the motor speed num
             if num > 0 and num < 10:
                 try:
@@ -150,7 +151,7 @@ class StepMotorSer(QDialog):
             try:
                 self.step_motor.write_bit(0x0003, 0)
                 self.step_motor.write_bit(0x0004, 0)
-                self.step_motor.write_bit(0x0005, 1)
+                self.step_motor.write_bit(0x0005, 1)    
             except:
                 self.ui.textEdit.append("Failed to write in 0x0005.")
             else:
