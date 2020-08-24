@@ -4,62 +4,90 @@ from PyQt5.QtWidgets import QDialog, QApplication
 from mainWindow import *
 
 
-class MyForm(QDialog):
+class StepMotorSer(QDialog):
     def __init__(self):
         super().__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        self.ui.pushButtonStepInfo.clicked.connect(self.show_step_info)
-        self.ui.pushButtonStepCircleSpeed.clicked.connect(
-            self.show_step_circle_speed)
-        self.ui.pushButtonStepEnable.clicked.connect(self.show_step_enable)
+        self.ui.pushButtonDivide.clicked.connect(self.set_divide)
         self.ui.pushButtonStepBackZero.clicked.connect(
-            self.show_step_back_zero)
+            self.set_step_back_zero)
+        self.ui.pushButtonStepCircleSpeed.clicked.connect(
+            self.set_step_circle_speed)
         self.ui.pushButtonClockwise.clicked.connect(self.set_clockwise)
         self.ui.pushButtonAntiClockwise.clicked.connect(self.set_anticlockwise)
         self.ui.pushButtonStop.clicked.connect(self.set_stop)
+        self.ui.pushButtonStepInfo.clicked.connect(self.show_step_info)
         self.show()
 
-    def show_step_info(self):
+    def set_divide(self):
         """
-            show step motor's serial's base information
+            set the step motor step detail divide
         """
+        # try to read the divided num
         try:
-            step_info = str(step_motor)
-            self.ui.textEdit.append(step_info)
+            num = self.ui.lineEditStepSpeedDivide.text()
+            num = int(num)
         except:
-            self.ui.textEdit.append('Failed to read from instrument')
+            self.ui.textEdit.append('Please set divide')
+        # if the divided num is right, try to set the divided num
+        if num in {1, 2, 4, 8}:
+            try:
+                while(int(step_motor.read_register(0x0001, 1)) != num):
+                    step_motor.write_register(0x0001, num, 1)
+            except:
+                self.ui.textEdit.append('wrong set')
+            else:
+                self.ui.textEdit.append('set successfully')
+        else:
+            self.ui.textEdit.append(
+                'Please input the right num in {1, 2, 4, 8}')
 
-    def show_step_circle_speed(self):
+    def set_step_back_zero(self):
         """
-            show step motor's circle speed
+            set the step motor's back to zero's register's num, i.e, the channel 
         """
+        # try to read the back zero num
         try:
-            step_circle_speed = str(step_motor.read_register(0x0008, 1))
-            self.ui.textEdit.append(step_circle_speed)
+            num = self.ui.lineEditBackZero.text()
+            num = int(num)
         except:
-            self.ui.textEdit.append("Failed to read from instrument.")
+            self.ui.textEdit.append('Please set back_zero')
+        # if the divided num is right, try to set the step_back_zero num
+        if num in {0, 1, 2, 3, 4, 5}:
+            try:
+                while(int(step_motor.read_register(0x0006, 1)) != num):
+                    step_motor.write_register(0x0006, num, 1)
+            except:
+                self.ui.textEdit.append('wrong set')
+            else:
+                self.ui.textEdit.append('set successfully')
+        else:
+            self.ui.textEdit.append(
+                'Please input the right num in {0, 1, 2, 3, 4, 5}')
 
-    def show_step_enable(self):
+    def set_step_circle_speed(self):
         """
-            show the step motor enable information, 0 is not enable, 
-            oppeseely 1 is enable
+            set step motor's circle speed
         """
+        # try to read the step motor speed num
         try:
-            step_enable = str(step_motor.read_register(0x004f, 1))
-            self.ui.textEdit.append(step_enable)
+            num = self.ui.lineEditStepSpeed.text()
+            num = float(num)
         except:
-            self.ui.textEdit.append("Failed to read from instrument.")
-
-    def show_step_back_zero(self):
-        """
-            show the step motor's bact to zero's register's num
-        """
-        try:
-            step_back_zero = str(step_motor.read_register(0x0006, 1))
-            self.ui.textEdit.append(step_back_zero)
-        except:
-            self.ui.textEdit.append("Failed to read from instrument.")
+            self.ui.textEdit.append('Please set step_circle_speed')
+        # if the step motor speed num is right, try to set the motor speed num
+        if num > 0 and num < 5:
+            try:
+                while(int(step_motor.read_register(0x0008, 1)) != num):
+                    step_motor.write_register(0x0008, num, 1)
+            except:
+                self.ui.textEdit.append('wrong set')
+            else:
+                self.ui.textEdit.append('set successfully')
+        else:
+            self.ui.textEdit.append(
+                'Please input the right num, 0 < num < 5 ')
 
     def set_clockwise(self):
         """
@@ -91,6 +119,15 @@ class MyForm(QDialog):
         except:
             self.ui.textEdit.append("Failed to stop the step_motor.")
 
+    def show_step_info(self):
+        """
+            show step motor's serial's base information
+        """
+        try:
+            step_info = str(self.step_motor)
+            self.ui.textEdit.append(step_info)
+        except:
+            self.ui.textEdit.append('Failed to read from instrument')
 
 
 if __name__ == "__main__":
@@ -100,6 +137,6 @@ if __name__ == "__main__":
     step_motor.serial.baudrate = 9600
 
     app = QApplication(sys.argv)
-    w = MyForm()
+    w = StepMotorSer()
     w.show()
     sys.exit(app.exec_())

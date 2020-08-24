@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>979</width>
-    <height>662</height>
+    <width>857</width>
+    <height>641</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,29 +16,52 @@
   <widget class="QTextEdit" name="textEdit">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>280</y>
+     <x>170</x>
+     <y>360</y>
      <width>431</width>
      <height>211</height>
     </rect>
    </property>
   </widget>
-  <widget class="QWidget" name="layoutWidget">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>60</y>
-     <width>301</width>
-     <height>131</height>
+     <x>130</x>
+     <y>30</y>
+     <width>561</width>
+     <height>51</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayoutShowInfo">
-    <item row="0" column="0">
-     <widget class="QPushButton" name="pushButtonStepInfo">
+   <property name="font">
+    <font>
+     <pointsize>22</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Step Motor Debuggint Pannel</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>110</y>
+     <width>631</width>
+     <height>65</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="2">
+     <widget class="QPushButton" name="pushButtonDivide">
       <property name="text">
-       <string>step_info</string>
+       <string>step_divide</string>
       </property>
      </widget>
+    </item>
+    <item row="0" column="3">
+     <widget class="QLineEdit" name="lineEditStepSpeedDivide"/>
     </item>
     <item row="1" column="0">
      <widget class="QPushButton" name="pushButtonStepBackZero">
@@ -48,59 +71,59 @@
      </widget>
     </item>
     <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEditBackZero"/>
+    </item>
+    <item row="1" column="2">
      <widget class="QPushButton" name="pushButtonStepCircleSpeed">
       <property name="text">
        <string>step_circle_speed</string>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QPushButton" name="pushButtonStepEnable">
+    <item row="1" column="3">
+     <widget class="QLineEdit" name="lineEditStepSpeed"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>230</y>
+     <width>401</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="pushButtonClockwise">
       <property name="text">
-       <string>step_enable</string>
+       <string>clockwise</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="pushButtonAntiClockwise">
+      <property name="text">
+       <string>anticlockwise</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pushButtonStop">
+      <property name="text">
+       <string>stop</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QPushButton" name="pushButtonStepInfo">
+      <property name="text">
+       <string>step_info</string>
       </property>
      </widget>
     </item>
    </layout>
-  </widget>
-  <widget class="QPushButton" name="pushButtonClockwise">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>80</y>
-     <width>121</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>clockwise</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButtonAntiClockwise">
-   <property name="geometry">
-    <rect>
-     <x>620</x>
-     <y>80</y>
-     <width>141</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>anticlockwise</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButtonStop">
-   <property name="geometry">
-    <rect>
-     <x>460</x>
-     <y>140</y>
-     <width>93</width>
-     <height>28</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>stop</string>
-   </property>
   </widget>
  </widget>
  <resources/>
