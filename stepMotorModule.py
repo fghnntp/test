@@ -1,14 +1,6 @@
-# This is the distutils script for creating a Python-based com (exe or dll)
-# server using win32com.  This script should be run like this:
-#
-#  % python setup.py py2exe
-#
-# After you run this (from this directory) you will find two directories here:
-# "build" and "dist".  The .dll or .exe in dist is what you are looking for.
-##############################################################################
-
-from distutils.core import setup
-import py2exe
+"""
+    define the StepMotor class
+"""
 import sys
 import minimalmodbus
 
@@ -178,5 +170,3 @@ class StepMotor(minimalmodbus.Instrument):
                     break
         else:
             print("can't set back to zero")
-
-setup(console=['stepMotorModule.py'])
